@@ -1,7 +1,6 @@
 import { NavLink } from "react-router-dom";
 import useRefreshToken from "../hooks/useRefreshToken";
-import { useEffect, useState } from "react";
-import axios from "axios";
+
 type Props = {};
 
 const ProtectedPage = (props: Props) => {
@@ -27,11 +26,7 @@ const ProtectedPage = (props: Props) => {
       <li className=" underline underline-offset-4 hover:no-underline hover:text-blue-800">
         <button
           className="rounded-lg bg-red-200 hover:bg-red-400  px-4 py-2"
-          onClick={() =>
-            axios.get("https://auth-restapi.herokuapp.com/api/auth/refresh", {
-              withCredentials: true,
-            })
-          }
+          onClick={() => refresh()}
         >
           Refresh
         </button>
