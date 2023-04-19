@@ -5,15 +5,15 @@ import {
 } from "../../utils/validationSchema";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
 import AuthServices from "../../api/services/auth.services";
 import { useNavigate } from "react-router-dom";
-import { useAuthStore } from "../../context/useAuth";
+
 interface Props {}
 
 const RegisterForm = (props: Props) => {
-  const setCredentials = useAuthStore((state) => state.setCredentials);
   const navigate = useNavigate();
+  const registerUser = AuthServices.useRegister;
+  const { mutate } = registerUser();
   const {
     register,
     handleSubmit,
@@ -24,20 +24,21 @@ const RegisterForm = (props: Props) => {
     resolver: zodResolver(registerUserSchema),
   });
 
-  const mutation = useMutation({
-    mutationFn: AuthServices.registerUser,
-    onMutate: () => console.log("mutating"),
-    onSuccess: (response) => {
-      console.log("success");
-      setCredentials(response.accessToken);
-      navigate("/main");
-    },
-    onError: () => console.log("error"),
-    onSettled: () => console.log("settled"),
-  });
+  // const setCredentials = useAuthStore((state) => state.setCredentials);
+  // const mutation = useMutation({
+  //   mutationFn: AuthServices.registerUser,
+  //   onMutate: () => console.log("mutating"),
+  //   onSuccess: (response) => {
+  //     console.log("success");
+  //     setCredentials(response.accessToken);
+  //     navigate("/main");
+  //   },
+  //   onError: () => console.log("error"),
+  //   onSettled: () => console.log("settled"),
+  // });
 
-  const formHandler: SubmitHandler<RegisterUserInput> = async (data) => {
-    mutation.mutateAsync(data);
+  const formHandler: SubmitHandler<RegisterUserInput> = (data) => {
+    mutate(data, { onSuccess: () => navigate("/main") });
   };
   return (
     <div className="h-full w-full flex flex-col justify-center items-center px-5">
