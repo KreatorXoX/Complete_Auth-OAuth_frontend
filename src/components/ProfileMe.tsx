@@ -1,23 +1,26 @@
 import { useQuery } from "@tanstack/react-query";
-import { useOutletContext, useParams } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 import UserServices from "../api/services/user.services";
-import useAxiosPrivate from "../hooks/usePrivateAxios";
 interface Props {}
 
-const UserPage = (props: Props) => {
-  const axiosPrivate = useAxiosPrivate();
-  const { id } = useParams();
+type ContextType = {
+  userId?: string;
+};
+const ProfileMe = (props: Props) => {
+  const ctx: ContextType = useOutletContext();
+  const userId = ctx.userId;
+
   const {
     isLoading,
     error,
     data: user,
   } = useQuery<IUser>({
-    queryKey: [`userId-${id}`],
-    queryFn: () =>
-      axiosPrivate.get<IUser>("/user/" + id).then((res) => res.data),
-    // queryFn: UserServices.findById.bind(null, id!),
-
-    enabled: !!id,
+    queryKey: [`userId-${userId}`],
+    queryFn: UserServices.findById.bind(null, userId!),
+    onSettled: (response) => {
+      console.log(response?._id);
+    },
+    enabled: !!userId,
   });
 
   if (isLoading) return <p>Loading spinner ...</p>;
@@ -34,4 +37,4 @@ const UserPage = (props: Props) => {
   );
 };
 
-export default UserPage;
+export default ProfileMe;

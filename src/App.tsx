@@ -9,6 +9,7 @@ import UserList from "./components/UsersPage";
 import AdminRoute from "./utils/routes/AdminRoute";
 import ProtectedRoute from "./utils/routes/ProtectedRoute";
 import ProtectedPage from "./pages/ProtectedPage";
+import ProfileMe from "./components/ProfileMe";
 
 const router = createBrowserRouter([
   {
@@ -29,7 +30,8 @@ const router = createBrowserRouter([
         element: <ProtectedRoute />,
         children: [
           { path: "/main", element: <ProtectedPage /> }, // authenticated only,
-          { path: "/user/me", element: <UserPage /> }, // authenticated only
+          { path: "/me", element: <ProfileMe /> }, // authenticated only
+          { path: "/user/:id", element: <UserPage /> }, // authenticated only
         ],
       },
     ],

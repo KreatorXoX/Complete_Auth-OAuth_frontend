@@ -1,17 +1,19 @@
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import UserServices from "../api/services/user.services";
-
+import useAxiosPrivate from "../hooks/usePrivateAxios";
 interface Props {}
 
 const UsersPage = (props: Props) => {
+  const axiosPrivate = useAxiosPrivate();
   const {
     isLoading,
     error,
     data: users,
   } = useQuery({
     queryKey: ["all-users"],
-    queryFn: UserServices.findAll,
+    queryFn: () => axiosPrivate.get<IUser[]>("/users").then((res) => res.data),
+    // queryFn: UserServices.findAll,
   });
 
   if (isLoading) return <p>Loading spinner ...</p>;

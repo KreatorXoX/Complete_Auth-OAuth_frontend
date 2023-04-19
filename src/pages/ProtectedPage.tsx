@@ -18,7 +18,7 @@ const ProtectedPage = (props: Props) => {
       <li className=" underline underline-offset-4 hover:no-underline hover:text-blue-800">
         <NavLink
           className="rounded-lg bg-red-200 hover:bg-red-400  px-4 py-2"
-          to={`/user/me`}
+          to={`/me`}
         >
           Me
         </NavLink>
