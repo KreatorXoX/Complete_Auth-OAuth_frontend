@@ -1,11 +1,12 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import UserServices from "../api/services/user.services";
 import useAxiosPrivate from "../hooks/usePrivateAxios";
 interface Props {}
 
 const UsersPage = (props: Props) => {
   const axiosPrivate = useAxiosPrivate();
+  const location = useLocation();
+  const navigate = useNavigate();
   const {
     isLoading,
     error,
@@ -13,12 +14,15 @@ const UsersPage = (props: Props) => {
   } = useQuery({
     queryKey: ["all-users"],
     queryFn: () => axiosPrivate.get<IUser[]>("/users").then((res) => res.data),
+    onError: (err) => {
+      console.log(err);
+      //  navigate("/login", { state: { from: location }, replace: true });
+    },
+
     // queryFn: UserServices.findAll,
   });
 
   if (isLoading) return <p>Loading spinner ...</p>;
-
-  if (error instanceof Error) return <p>{error.message}</p>;
 
   return (
     <article>
@@ -32,7 +36,7 @@ const UsersPage = (props: Props) => {
           </li>
         ))}
       </ul>
-      {users && users.length > 0 && <p>No User Found</p>}
+      {!users && <p>No User Found</p>}
     </article>
   );
 };

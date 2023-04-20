@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { useOutletContext, useParams } from "react-router-dom";
-import UserServices from "../api/services/user.services";
+import { useParams } from "react-router-dom";
+
 import useAxiosPrivate from "../hooks/usePrivateAxios";
 interface Props {}
 
@@ -15,8 +15,6 @@ const UserPage = (props: Props) => {
     queryKey: [`userId-${id}`],
     queryFn: () =>
       axiosPrivate.get<IUser>("/user/" + id).then((res) => res.data),
-    // queryFn: UserServices.findById.bind(null, id!),
-
     enabled: !!id,
   });
 

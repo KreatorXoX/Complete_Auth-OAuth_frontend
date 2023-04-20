@@ -6,12 +6,13 @@ import {
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import AuthServices from "../../api/services/auth.services";
+import useAxiosPrivate from "../../hooks/usePrivateAxios";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../context/useAuth";
 interface Props {}
 
 const RegisterForm = (props: Props) => {
+  const axiosPrivate = useAxiosPrivate();
   const setCredentials = useAuthStore((state) => state.setCredentials);
   const navigate = useNavigate();
   const {
@@ -25,15 +26,14 @@ const RegisterForm = (props: Props) => {
   });
 
   const mutation = useMutation({
-    mutationFn: AuthServices.registerUser,
-    onMutate: () => console.log("mutating"),
+    mutationFn: (data: RegisterUserInput) =>
+      axiosPrivate.post("/auth/register", { ...data }).then((res) => res.data),
     onSuccess: (response) => {
       console.log("success");
       setCredentials(response.accessToken);
       navigate("/main");
     },
     onError: () => console.log("error"),
-    onSettled: () => console.log("settled"),
   });
 
   const formHandler: SubmitHandler<RegisterUserInput> = async (data) => {

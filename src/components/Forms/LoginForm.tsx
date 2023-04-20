@@ -2,13 +2,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { LoginUserInput, loginUserSchema } from "../../utils/validationSchema";
 import { useMutation } from "@tanstack/react-query";
-import AuthServices from "../../api/services/auth.services";
+import useAxiosPrivate from "../../hooks/usePrivateAxios";
 import Input from "../Input";
-import { useNavigate } from "react-router-dom";
+import { Location, useLocation, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../context/useAuth";
+
 const LoginForm = () => {
+  const axiosPrivate = useAxiosPrivate();
+  const location = useLocation();
+  const from = location.state?.from.pathname || "/main";
+
   const setCredentials = useAuthStore((state) => state.setCredentials);
   const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -20,19 +26,20 @@ const LoginForm = () => {
   });
 
   const mutation = useMutation({
-    mutationFn: AuthServices.loginUser,
-    onMutate: () => console.log("mutating"),
+    mutationFn: (data: LoginUserInput) =>
+      axiosPrivate
+        .post<IToken>("/auth/login", { ...data })
+        .then((res) => res.data),
     onSuccess: (response) => {
       console.log("success");
       setCredentials(response.accessToken);
-      navigate("/main");
+      navigate(from, { replace: true });
     },
     onError: () => console.log("error"),
-    onSettled: () => console.log("settled"),
   });
 
-  const formHandler: SubmitHandler<LoginUserInput> = async (data) => {
-    mutation.mutateAsync(data);
+  const formHandler: SubmitHandler<LoginUserInput> = (data) => {
+    mutation.mutate(data);
   };
   return (
     <div className="h-full w-full flex flex-col justify-center items-center px-5">

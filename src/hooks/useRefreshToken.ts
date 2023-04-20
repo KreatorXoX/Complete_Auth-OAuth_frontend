@@ -3,15 +3,20 @@ import { useAuthStore } from "../context/useAuth";
 
 const useRefreshToken = () => {
   const setCredentials = useAuthStore((state) => state.setCredentials);
+  const logOut = useAuthStore((state) => state.logOut);
 
   const refresh = async () => {
-    const response = await axios.get("/auth/refresh", {
-      withCredentials: true,
-    });
-    console.log(response);
-    setCredentials(response.data.accessToken);
+    try {
+      const response = await axios.get("/auth/refresh", {
+        withCredentials: true,
+      });
+      console.log(response);
+      setCredentials(response.data.accessToken);
 
-    return response.data.accessToken;
+      return response.data.accessToken;
+    } catch (error) {
+      logOut();
+    }
   };
   return refresh;
 };

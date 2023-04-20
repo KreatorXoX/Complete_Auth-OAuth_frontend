@@ -1,12 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { useOutletContext } from "react-router-dom";
-import UserServices from "../api/services/user.services";
+import useAxiosPrivate from "../hooks/usePrivateAxios";
 interface Props {}
 
 type ContextType = {
   userId?: string;
 };
 const ProfileMe = (props: Props) => {
+  const axiosPrivate = useAxiosPrivate();
+
   const ctx: ContextType = useOutletContext();
   const userId = ctx.userId;
 
@@ -16,7 +18,8 @@ const ProfileMe = (props: Props) => {
     data: user,
   } = useQuery<IUser>({
     queryKey: [`userId-${userId}`],
-    queryFn: UserServices.findById.bind(null, userId!),
+    queryFn: () =>
+      axiosPrivate.get<IUser>("/user" + userId).then((res) => res.data),
     onSettled: (response) => {
       console.log(response?._id);
     },
