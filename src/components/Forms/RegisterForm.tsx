@@ -24,19 +24,6 @@ const RegisterForm = (props: Props) => {
     resolver: zodResolver(registerUserSchema),
   });
 
-  // const setCredentials = useAuthStore((state) => state.setCredentials);
-  // const mutation = useMutation({
-  //   mutationFn: AuthServices.registerUser,
-  //   onMutate: () => console.log("mutating"),
-  //   onSuccess: (response) => {
-  //     console.log("success");
-  //     setCredentials(response.accessToken);
-  //     navigate("/main");
-  //   },
-  //   onError: () => console.log("error"),
-  //   onSettled: () => console.log("settled"),
-  // });
-
   const formHandler: SubmitHandler<RegisterUserInput> = (data) => {
     mutate(data, { onSuccess: () => navigate("/main") });
   };

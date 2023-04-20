@@ -1,4 +1,6 @@
 import { create } from "zustand";
+import { devtools } from "zustand/middleware";
+import axiosApi from "../api/axios";
 
 interface AuthState {
   token: string | null;
@@ -6,10 +8,15 @@ interface AuthState {
   logOut: () => void;
 }
 
-export const useAuthStore = create<AuthState>()((set) => ({
-  token: null,
-  setCredentials: (token) => set({ token: token }),
-  logOut: () => set({ token: null }),
-}));
+export const useAuthStore = create<AuthState>()(
+  devtools((set) => ({
+    token: null,
+    setCredentials: (token) => set({ token: token }),
+    logOut: () => {
+      axiosApi.post("/auth/logout");
+      set({ token: null });
+    },
+  }))
+);
 
 export const selectCurrentToken = useAuthStore.getState().token;

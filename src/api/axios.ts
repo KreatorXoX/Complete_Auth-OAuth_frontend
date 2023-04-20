@@ -16,6 +16,7 @@ axiosApi.interceptors.request.use(
     return config;
   },
   (err) => {
+    console.log("req err");
     Promise.reject(err);
   }
 );
@@ -34,10 +35,13 @@ axiosApi.interceptors.response.use(
           withCredentials: true,
         }
       );
+
       useAuthStore.setState({ token: newAccessToken.data.accessToken });
+
       originalReq.headers[
         "Authorization"
       ] = `Bearer ${newAccessToken.data.accessToken}`;
+
       return axiosApi(originalReq);
     }
 

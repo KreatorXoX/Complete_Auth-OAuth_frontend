@@ -5,21 +5,9 @@ interface Props {}
 const UsersPage = (props: Props) => {
   const getAllUsers = UserServices.useGetUsers;
 
-  const { isLoading, error, data: users } = getAllUsers();
-
-  // const {
-  //   isLoading,
-  //   error,
-  //   data: users,
-  // } = useQuery({
-  //   queryKey: ["all-users"],
-  //   queryFn: () => axiosPrivate.get<IUser[]>("/users").then((res) => res.data),
-  //   // queryFn: UserServices.findAll,
-  // });
+  const { isLoading, data: users } = getAllUsers();
 
   if (isLoading) return <p>Loading spinner ...</p>;
-
-  if (error instanceof Error) return <p>{error.message}</p>;
 
   return (
     <article>

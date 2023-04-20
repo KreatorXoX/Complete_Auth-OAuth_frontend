@@ -3,13 +3,15 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { LoginUserInput, loginUserSchema } from "../../utils/validationSchema";
 import AuthServices from "../../api/services/auth.services";
 import Input from "../Input";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const LoginForm = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from.pathname || "/main";
   const logUser = AuthServices.useLogin;
   const { mutate } = logUser();
-  // const setCredentials = useAuthStore((state) => state.setCredentials);
+
   const {
     register,
     handleSubmit,
@@ -20,20 +22,8 @@ const LoginForm = () => {
     resolver: zodResolver(loginUserSchema),
   });
 
-  // const mutation = useMutation({
-  //   mutationFn: AuthServices.loginUser,
-  //   onMutate: () => console.log("mutating"),
-  //   onSuccess: (response) => {
-  //     console.log("success");
-  //     setCredentials(response.accessToken);
-  //     navigate("/main");
-  //   },
-  //   onError: () => console.log("error"),
-  //   onSettled: () => console.log("settled"),
-  // });
-
   const formHandler: SubmitHandler<LoginUserInput> = (data) => {
-    mutate(data, { onSuccess: () => navigate("/main") });
+    mutate(data, { onSuccess: () => navigate(from, { replace: true }) });
   };
   return (
     <div className="h-full w-full flex flex-col justify-center items-center px-5">
