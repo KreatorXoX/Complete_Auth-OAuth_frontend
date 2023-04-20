@@ -10,6 +10,7 @@ import AdminRoute from "./utils/routes/AdminRoute";
 import ProtectedRoute from "./utils/routes/ProtectedRoute";
 import ProtectedPage from "./pages/ProtectedPage";
 import ProfileMe from "./components/ProfileMe";
+import PersistLogin from "./components/PersistLogin";
 
 const router = createBrowserRouter([
   {
@@ -21,17 +22,22 @@ const router = createBrowserRouter([
       { path: "/login", element: <Login /> },
       { path: "/register", element: <Register /> },
       {
-        element: <AdminRoute />,
+        element: <PersistLogin />,
         children: [
-          { path: "/users", element: <UserList /> }, // admin only
-        ],
-      },
-      {
-        element: <ProtectedRoute />,
-        children: [
-          { path: "/main", element: <ProtectedPage /> }, // authenticated only,
-          { path: "/me", element: <ProfileMe /> }, // authenticated only
-          { path: "/user/:id", element: <UserPage /> }, // authenticated only
+          {
+            element: <AdminRoute />,
+            children: [
+              { path: "/users", element: <UserList /> }, // admin only
+            ],
+          },
+          {
+            element: <ProtectedRoute />,
+            children: [
+              { path: "/main", element: <ProtectedPage /> }, // authenticated only,
+              { path: "/me", element: <ProfileMe /> }, // authenticated only
+              { path: "/user/:id", element: <UserPage /> }, // authenticated only
+            ],
+          },
         ],
       },
     ],
