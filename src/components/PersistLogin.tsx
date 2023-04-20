@@ -20,9 +20,6 @@ const PersistLogin = () => {
         isMounted && setIsLoading(false);
       }
     };
-
-    // persist added here AFTER tutorial video
-    // Avoids unwanted call to verifyRefreshToken
     !token ? verifyRefreshToken() : setIsLoading(false);
 
     return () => {
