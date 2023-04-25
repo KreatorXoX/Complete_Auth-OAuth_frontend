@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 import useAxiosPrivate from "../hooks/usePrivateAxios";
 interface Props {}
 
 const UserPage = (props: Props) => {
+  const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
   const { id } = useParams();
   const {
@@ -28,6 +29,7 @@ const UserPage = (props: Props) => {
       <h2>
         {user?.firstName} - {user?.lastName}
       </h2>
+      <button onClick={() => navigate("/users")}>Go Back</button>
     </section>
   );
 };

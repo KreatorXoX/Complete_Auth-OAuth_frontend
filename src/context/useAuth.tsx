@@ -1,4 +1,6 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import axios from "../api/axios";
 
 interface AuthState {
   token: string | null;
@@ -8,8 +10,27 @@ interface AuthState {
 
 export const useAuthStore = create<AuthState>()((set) => ({
   token: null,
+
   setCredentials: (token) => set({ token: token }),
-  logOut: () => set({ token: null }),
+  logOut: () => {
+    axios.post("/auth/logout");
+    set({ token: null });
+  },
 }));
 
-export const selectCurrentToken = useAuthStore.getState().token;
+interface PersistState {
+  persist: boolean;
+  setPersist: (shouldPersist: boolean) => void;
+}
+
+export const usePersistStore = create<PersistState>()(
+  persist(
+    (set) => ({
+      persist: false,
+      setPersist: (shouldPersist) => set({ persist: shouldPersist }),
+    }),
+    {
+      name: "persistent-auth",
+    }
+  )
+);

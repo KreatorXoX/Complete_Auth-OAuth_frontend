@@ -19,10 +19,7 @@ const ProfileMe = (props: Props) => {
   } = useQuery<IUser>({
     queryKey: [`userId-${userId}`],
     queryFn: () =>
-      axiosPrivate.get<IUser>("/user" + userId).then((res) => res.data),
-    onSettled: (response) => {
-      console.log(response?._id);
-    },
+      axiosPrivate.get<IUser>("/user/" + userId).then((res) => res.data),
     enabled: !!userId,
   });
 

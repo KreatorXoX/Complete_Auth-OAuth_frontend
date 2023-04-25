@@ -11,6 +11,8 @@ import ProtectedRoute from "./utils/routes/ProtectedRoute";
 import ProtectedPage from "./pages/ProtectedPage";
 import ProfileMe from "./components/ProfileMe";
 import PersistLogin from "./components/PersistLogin";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 const router = createBrowserRouter([
   {
@@ -21,6 +23,11 @@ const router = createBrowserRouter([
       { index: true, element: <PublicPage /> },
       { path: "/login", element: <Login /> },
       { path: "/register", element: <Register /> },
+      { path: "/forgot-password", element: <ForgotPassword /> },
+      {
+        path: "/reset-password/:id/:passwordResetCode",
+        element: <ResetPassword />,
+      },
       {
         element: <PersistLogin />,
         children: [

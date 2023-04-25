@@ -4,19 +4,21 @@ import { LoginUserInput, loginUserSchema } from "../../utils/validationSchema";
 import { useMutation } from "@tanstack/react-query";
 import useAxiosPrivate from "../../hooks/usePrivateAxios";
 import Input from "../Input";
-import { Location, useLocation, useNavigate } from "react-router-dom";
-import { useAuthStore } from "../../context/useAuth";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuthStore, usePersistStore } from "../../context/useAuth";
 
 const LoginForm = () => {
   const axiosPrivate = useAxiosPrivate();
   const location = useLocation();
   const from = location.state?.from.pathname || "/main";
 
+  const setPersist = usePersistStore((state) => state.setPersist);
   const setCredentials = useAuthStore((state) => state.setCredentials);
   const navigate = useNavigate();
 
   const {
     register,
+    getValues,
     handleSubmit,
     formState: { errors, isValid },
   } = useForm<LoginUserInput>({
@@ -31,8 +33,8 @@ const LoginForm = () => {
         .post<IToken>("/auth/login", { ...data })
         .then((res) => res.data),
     onSuccess: (response) => {
-      console.log("success");
       setCredentials(response.accessToken);
+      setPersist(getValues("persist")!);
       navigate(from, { replace: true });
     },
     onError: () => console.log("error"),
@@ -43,27 +45,44 @@ const LoginForm = () => {
   };
   return (
     <div className="h-full w-full flex flex-col justify-center items-center px-5">
+      <h2 className="text-2xl mb-5 font-semibold text-gray-600">Login Form</h2>
       <form
         onSubmit={handleSubmit(formHandler)}
         className="w-full max-w-4xl px-6 py-4 space-y-4 shadow-lg rounded-lg bg-blue-200"
       >
         <Input
           type="email"
-          half={false}
           label="Email"
           id="email"
           error={errors.email?.message}
           {...register("email")}
         />
         <Input
-          half={false}
           label="Password"
           type="password"
           id="password"
           error={errors.password?.message}
           {...register("password")}
         />
-
+        <div className="flex justify-between">
+          <div className="flex items-center gap-2">
+            <label
+              className="select-none italic font-semibold text-green-600"
+              htmlFor="persist"
+            >
+              Trust this device ?
+            </label>
+            <input id="persist" {...register("persist")} type="checkbox" />
+          </div>
+          <div>
+            <Link
+              to={"/forgot-password"}
+              className="italic underline text-sm text-orange-700 font-medium"
+            >
+              Forgot your password ?
+            </Link>
+          </div>
+        </div>
         <button
           disabled={!isValid}
           type="submit"

@@ -37,6 +37,7 @@ const UsersPage = (props: Props) => {
         ))}
       </ul>
       {!users && <p>No User Found</p>}
+      <button onClick={() => navigate("/main")}>Go Back</button>
     </article>
   );
 };
