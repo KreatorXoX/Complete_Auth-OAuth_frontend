@@ -7,15 +7,12 @@ import {
 import { useMutation } from "@tanstack/react-query";
 
 import Input from "../Input";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
 import axios from "../../api/axios";
 
 const ResetPasswordForm = () => {
   const params = useParams();
-  console.log(params);
-
-  const navigate = useNavigate();
 
   const {
     register,
@@ -28,7 +25,14 @@ const ResetPasswordForm = () => {
     resolver: zodResolver(resetPasswordSchema),
   });
 
-  const mutation = useMutation({
+  const {
+    mutate: resetPassword,
+    isError,
+    isLoading,
+    isSuccess,
+    error,
+    data: response,
+  } = useMutation({
     mutationFn: (data: ResetPasswordInput) =>
       axios
         .post(
@@ -36,16 +40,28 @@ const ResetPasswordForm = () => {
           { ...data }
         )
         .then((res) => res.data),
-    onSuccess: (response) => {
-      console.log(response);
-      navigate("/login");
-    },
-    onError: () => console.log("error"),
   });
 
   const formHandler: SubmitHandler<ResetPasswordInput> = (data) => {
-    mutation.mutate(data);
+    resetPassword(data);
   };
+
+  if (isLoading) {
+    return <p>loading ...</p>;
+  }
+  if (isError) {
+    return <p>{JSON.stringify(error)}</p>;
+  }
+  if (isSuccess) {
+    return (
+      <div className="flex flex-col gap-2 justify-center items-center">
+        <p className="text-gray-700">{response}</p>
+        <Link className="underline italic text-blue-600 font-bold" to="/login">
+          back to Login
+        </Link>
+      </div>
+    );
+  }
   return (
     <div className="h-full w-full flex flex-col justify-center items-center px-5">
       <form

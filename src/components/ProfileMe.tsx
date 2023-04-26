@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useOutletContext } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 import useAxiosPrivate from "../hooks/usePrivateAxios";
 interface Props {}
 
@@ -28,11 +28,22 @@ const ProfileMe = (props: Props) => {
   if (error instanceof Error) return <p>{error.message}</p>;
 
   return (
-    <section>
-      <h3>Welcome</h3>
-      <h2>
-        {user?.firstName} - {user?.lastName}
-      </h2>
+    <section className="border border-gray-500 p-5 rounded-lg flex flex-col gap-5">
+      <div>
+        <h3>Welcome {user?.firstName}</h3>
+        <p className="text-red-500 text-sm">
+          This is authenticated user only page
+        </p>
+      </div>
+      <div>
+        <h2>Id : {user?._id}</h2>
+        <h2>
+          Fullname : {user?.firstName} {user?.lastName}
+        </h2>
+      </div>
+      <Link className="text-blue-600 underline font-bold italic" to="/main">
+        Go Back
+      </Link>
     </section>
   );
 };

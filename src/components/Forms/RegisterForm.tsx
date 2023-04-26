@@ -29,11 +29,9 @@ const RegisterForm = (props: Props) => {
     mutationFn: (data: RegisterUserInput) =>
       axiosPrivate.post("/auth/register", { ...data }).then((res) => res.data),
     onSuccess: (response) => {
-      console.log("success");
       setCredentials(response.accessToken);
       navigate("/main");
     },
-    onError: () => console.log("error"),
   });
 
   const formHandler: SubmitHandler<RegisterUserInput> = async (data) => {

@@ -5,7 +5,7 @@ type Props = {};
 const ResetPassword = (props: Props) => {
   return (
     <div className="w-full flex flex-col justify-center items-center space-y-10">
-      <h2 className="text-red-500 text-2xl">Forgot Password ??? </h2>
+      <h2 className="text-red-500 text-2xl">Reset Password</h2>
       <ResetPasswordForm />
     </div>
   );

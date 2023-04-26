@@ -72,7 +72,12 @@ const LoginForm = () => {
             >
               Trust this device ?
             </label>
-            <input id="persist" {...register("persist")} type="checkbox" />
+            <input
+              id="persist"
+              {...register("persist")}
+              type="checkbox"
+              defaultChecked
+            />
           </div>
           <div>
             <Link

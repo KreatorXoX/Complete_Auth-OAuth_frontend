@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import axios from "../api/axios";
+import axios from "axios";
 
 interface AuthState {
   token: string | null;
@@ -13,7 +13,12 @@ export const useAuthStore = create<AuthState>()((set) => ({
 
   setCredentials: (token) => set({ token: token }),
   logOut: () => {
-    axios.post("/auth/logout");
+    // because we cant use our private axios hook here...
+    axios.post(
+      "http://localhost:1337/api/auth/logout",
+      {},
+      { withCredentials: true, headers: { "Content-Type": "applicaiton/json" } }
+    );
     set({ token: null });
   },
 }));

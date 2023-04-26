@@ -7,13 +7,11 @@ import {
 import { useMutation } from "@tanstack/react-query";
 
 import Input from "../Input";
-import { Link, useNavigate } from "react-router-dom";
 
 import axios from "../../api/axios";
+import { Link } from "react-router-dom";
 
 const ForgotForm = () => {
-  const navigate = useNavigate();
-
   const {
     register,
 
@@ -25,18 +23,37 @@ const ForgotForm = () => {
     resolver: zodResolver(forgotPasswordSchema),
   });
 
-  const mutation = useMutation({
+  const {
+    mutate: sendResetLink,
+    isLoading,
+    isError,
+    error,
+    isSuccess,
+    data: response,
+  } = useMutation({
     mutationFn: (data: ForgotPasswordInput) =>
       axios.post("/users/forgot-password", { ...data }).then((res) => res.data),
-    onSuccess: (response) => {
-      console.log(response);
-    },
-    onError: () => console.log("error"),
   });
 
   const formHandler: SubmitHandler<ForgotPasswordInput> = (data) => {
-    mutation.mutate(data);
+    sendResetLink(data);
   };
+  if (isLoading) {
+    return <p>loading ...</p>;
+  }
+  if (isError) {
+    return <p>{JSON.stringify(error)}</p>;
+  }
+  if (isSuccess) {
+    return (
+      <div className="flex flex-col gap-2 justify-center items-center">
+        <p className="text-gray-700">{response}</p>
+        <Link className="underline italic text-blue-600 font-bold" to="/login">
+          back to Login
+        </Link>
+      </div>
+    );
+  }
   return (
     <div className="h-full w-full flex flex-col justify-center items-center px-5">
       <form

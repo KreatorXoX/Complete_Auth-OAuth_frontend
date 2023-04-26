@@ -15,10 +15,3 @@ export const axiosPrivate = axios.create({
   },
   withCredentials: true,
 });
-// export const privateAxios = axios.create({
-//   baseURL: "http://localhost:1337/api",
-//   headers: {
-//     "Content-Type": "application/json",
-//   },
-//   withCredentials: true,
-// });
