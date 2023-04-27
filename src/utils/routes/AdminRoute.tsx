@@ -23,7 +23,7 @@ const AdminRoute = (props: Props) => {
     <Outlet />
   ) : (
     <div className="h-full w-full bg-gray-200 flex flex-col gap-5 justify-center items-center text-red-500">
-      <h2 className="text-2xl font-semibold">
+      <h2 className="text-2xl font-semibold text-center">
         You need to have admin priviledges
       </h2>
       <Link

@@ -23,7 +23,9 @@ const ProtectedRoute = (props: Props) => {
     <Outlet context={{ userId: userInfo._id }} />
   ) : (
     <div className="h-full w-full bg-gray-200 flex flex-col gap-5 justify-center items-center text-red-500">
-      <h2 className="text-2xl font-semibold">You need to be logged in</h2>
+      <h2 className="text-2xl font-semibold text-center">
+        You need to be logged in
+      </h2>
       <Link
         to="/login"
         className="text-blue-600 underline font-bold italic"

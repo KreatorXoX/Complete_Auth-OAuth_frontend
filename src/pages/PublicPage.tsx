@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import getGoogleOAuthURL from "../utils/getGoogleUrl";
 
 interface Props {}
 
@@ -20,6 +21,14 @@ const PublicPage = (props: Props) => {
             to="/register"
           >
             Register
+          </NavLink>
+        </li>
+        <li className=" underline underline-offset-4 hover:no-underline hover:text-blue-800">
+          <NavLink
+            className="rounded-lg bg-red-200 hover:bg-red-400  px-4 py-2"
+            to={getGoogleOAuthURL()}
+          >
+            Login with Google
           </NavLink>
         </li>
       </ul>

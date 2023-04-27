@@ -8,12 +8,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import useAxiosPrivate from "../../hooks/usePrivateAxios";
 import { useNavigate } from "react-router-dom";
-import { useAuthStore } from "../../context/useAuth";
+
 interface Props {}
 
 const RegisterForm = (props: Props) => {
   const axiosPrivate = useAxiosPrivate();
-  const setCredentials = useAuthStore((state) => state.setCredentials);
+
   const navigate = useNavigate();
   const {
     register,
@@ -28,9 +28,8 @@ const RegisterForm = (props: Props) => {
   const mutation = useMutation({
     mutationFn: (data: RegisterUserInput) =>
       axiosPrivate.post("/auth/register", { ...data }).then((res) => res.data),
-    onSuccess: (response) => {
-      setCredentials(response.accessToken);
-      navigate("/main");
+    onSuccess: () => {
+      navigate("/register/success");
     },
   });
 
